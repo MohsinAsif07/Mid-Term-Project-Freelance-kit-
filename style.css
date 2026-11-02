@@ -28,6 +28,12 @@ body{
     margin-bottom: 10px;
 }
 
+.sidebar-tagline{
+    font-size: 11px;
+    color: #94a3b8;
+    margin: 5px 0 20px 0;
+}
+
 .nav-button{
     width: 100%;
     padding: 12px;
@@ -47,6 +53,13 @@ body{
     font-weight: bold;
 }
 
+.made-by{
+    margin-top: auto;
+    font-size: 11px;
+    color: #64748b;
+    padding-top: 30px;
+}
+
 .main{
     flex: 1;
     display: flex;
@@ -62,6 +75,13 @@ body{
     border-bottom: 1px solid #e2e8f0;
     flex-wrap: wrap;
     gap: 10px;
+}
+
+.topbar-right{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .search-input{
@@ -129,6 +149,28 @@ body{
     font-weight: bold;
 }
 
+.icon-box.blue{
+    background-color: #0ea5e9;
+}
+
+.icon-box.orange{
+    background-color: #f59e0b;
+}
+
+.green-text{
+    color: green;
+}
+
+.red-text{
+    color: red;
+}
+
+.small-gray{
+    font-size: 12px;
+    color: gray;
+    margin-top: 4px;
+}
+
 .two-col{
     display: flex;
     gap: 18px;
@@ -141,6 +183,33 @@ body{
     border: 1px solid #e2e8f0;
     border-radius: 14px;
     padding: 18px;
+}
+
+.form-box{
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.form-box input,
+.form-box select{
+    flex: 1 1 200px;
+    padding: 11px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: white;
+}
+
+.form-box input:focus,
+.form-box select:focus{
+    outline: none;
+    border-color: #10b981;
 }
 
 .simple-chart{
@@ -160,13 +229,21 @@ body{
     border-radius: 5px 5px 0 0;
 }
 
+.chart-labels{
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-top: 6px;
+    color: #64748b;
+}
+
 table{
     width: 100%;
     border-collapse: collapse;
 }
 
 th, td{
-    padding: 10px;
+    padding: 12px 10px;
     border-bottom: 1px solid #f1f5f9;
     text-align: left;
     font-size: 13px;
@@ -187,8 +264,13 @@ th, td{
         align-items: flex-start;
     }
 
+    .topbar-right{
+        width: 100%;
+    }
+
     .search-input{
         width: 100%;
+        flex: 1 1 100%;
     }
 
     .stats{
@@ -197,6 +279,17 @@ th, td{
 
     .two-col{
         flex-direction: column;
+    }
+
+    .form-box{
+        flex-direction: column;
+    }
+
+    .form-box input,
+    .form-box select,
+    .form-box button{
+        width: 100%;
+        flex: 1 1 100%;
     }
 
     .main{
