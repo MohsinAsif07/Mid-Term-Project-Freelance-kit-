@@ -9,44 +9,41 @@
 <body>
 <div class="container">
   <div class="sidebar">
-    <img src="logo.png" class="logo-img">
-    <p style="font-size:11px; color:#94a3b8; margin:5px 0 15px;">Your Business Organized</p>
-    
-    <button class="nav-button active" onclick="showPage('dashboard')">Dashboard</button>
-    <button class="nav-button" onclick="showPage('clients')">Clients</button>
-    <button class="nav-button" onclick="showPage('projects')">Projects</button>
-    <button class="nav-button" onclick="showPage('earnings')">Earnings</button>
-    <button class="nav-button" onclick="showPage('invoices')">Invoices</button>
-
-    <p style="margin-top:auto; font-size:11px; color:#64748b; padding-top:20px;">Made by Mohsin Asif</p>
+    <img src="logo.png" class="logo-img" alt="logo">
+    <p style="font-size:11px; color:#94a3b8; margin:5px 0 20px;">Your Business Organized</p>
+    <button class="nav-button active" onclick="showPage('dashboard', this)">Dashboard</button>
+    <button class="nav-button" onclick="showPage('clients', this)">Clients</button>
+    <button class="nav-button" onclick="showPage('projects', this)">Projects</button>
+    <button class="nav-button" onclick="showPage('earnings', this)">Earnings</button>
+    <button class="nav-button" onclick="showPage('invoices', this)">Invoices</button>
+    <p style="margin-top:auto; font-size:11px; color:#64748b; padding-top:30px;">Made by Mohsin Asif</p>
   </div>
 
   <div class="main">
     <div class="topbar">
-      <h3>Dashboard</h3>
-      <div style="display:flex; gap:10px; align-items:center;">
+      <h3 id="page-title">Dashboard</h3>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
         <input class="search-input" placeholder="Search...">
         <button class="green-btn">+ New Invoice</button>
       </div>
     </div>
 
+    <!-- Dashboard -->
     <div id="dashboard" class="page active">
       <div class="heading-area">
         <h2>Freelance Dashboard</h2>
         <p>Manage your clients, projects and payments in one place.</p>
       </div>
-
       <div class="stats">
         <div class="stat-card"><span>Total Earnings</span><h2>$500</h2><small style="color:green;">+12.5% from last month</small><div class="icon-box">$</div></div>
         <div class="stat-card"><span>Active Projects</span><h2>1</h2><small style="color:green;">+2 from last month</small><div class="icon-box" style="background:#0ea5e9;">F</div></div>
         <div class="stat-card"><span>Total Clients</span><h2>2</h2><small style="color:green;">+4 from last month</small><div class="icon-box">C</div></div>
         <div class="stat-card"><span>Pending Payments</span><h2>$200</h2><small style="color:red;">-5.2% from last month</small><div class="icon-box" style="background:#f59e0b;">P</div></div>
       </div>
-
       <div class="two-col">
         <div class="box">
           <h3>Recent Projects</h3>
-          <table style="margin-top:10px;">
+          <table style="margin-top:12px;">
             <tr><th>Project</th><th>Client</th><th>Budget</th><th>Status</th></tr>
             <tr><td>Logo Design</td><td>Sarah Khan</td><td>$300</td><td>Completed</td></tr>
             <tr><td>Website Design</td><td>John Smith</td><td>$500</td><td>In Progress</td></tr>
@@ -54,14 +51,46 @@
         </div>
         <div class="box">
           <h3>Earnings Overview</h3>
-          <p style="font-size:12px; color:gray;">Last 6 months</p>
+          <p style="font-size:12px; color:gray; margin-top:4px;">Last 6 months - May to Oct</p>
           <div class="simple-chart">
-            <div class="bar" style="height:30%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:45%"></div><div class="bar" style="height:75%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:90%"></div>
+            <div class="bar" style="height:30%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:85%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:75%"></div><div class="bar" style="height:95%"></div>
           </div>
-          <div style="display:flex; justify-content:space-between; font-size:10px; margin-top:5px;"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; margin-top:6px;"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div>
         </div>
       </div>
     </div>
+
+    <!-- Clients -->
+    <div id="clients" class="page">
+      <div class="heading-area"><h2>Clients</h2><p>All your clients in one place.</p></div>
+      <div class="form-box"><input id="clientName" placeholder="Client Name"><input id="clientEmail" placeholder="Email"><button class="green-btn" onclick="addClient()">Add Client</button></div>
+      <div class="table-box"><table id="clientsTable"><tr><th>Name</th><th>Email</th></tr></table></div>
+    </div>
+
+    <!-- Projects -->
+    <div id="projects" class="page">
+      <div class="heading-area"><h2>Projects</h2><p>Track your work.</p></div>
+      <div class="form-box"><input id="projectName" placeholder="Project Name"><input id="projectBudget" placeholder="Budget $"><select id="projectClient"></select><button class="green-btn" onclick="addProject()">Add Project</button></div>
+      <div class="table-box"><table id="projectsTable"><tr><th>Project</th><th>Client</th><th>Budget</th><th>Status</th></tr></table></div>
+    </div>
+
+    <!-- Earnings -->
+    <div id="earnings" class="page">
+      <div class="heading-area"><h2>Earnings</h2><p>Your income overview.</p></div>
+      <div class="stats">
+        <div class="stat-card"><span>Total Earned</span><h2>$1300</h2></div>
+        <div class="stat-card"><span>This Month</span><h2>$500</h2></div>
+      </div>
+      <div class="box"><h3>Last 6 Months</h3><div class="simple-chart"><div class="bar" style="height:40%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:90%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:80%"></div></div></div>
+    </div>
+
+    <!-- Invoices -->
+    <div id="invoices" class="page">
+      <div class="heading-area"><h2>Invoices</h2><p>Create and manage invoices.</p></div>
+      <div class="form-box"><input id="invoiceClient" placeholder="Client"><input id="invoiceAmount" placeholder="Amount $"><button class="green-btn" onclick="addInvoice()">Create Invoice</button></div>
+      <div class="table-box"><table id="invoicesTable"><tr><th>Client</th><th>Amount</th><th>Date</th></tr></table></div>
+    </div>
+
   </div>
 </div>
 <script src="app.js"></script>
