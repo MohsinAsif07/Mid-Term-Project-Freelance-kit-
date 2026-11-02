@@ -9,14 +9,23 @@ function showPage(pageId, btn) {
 
     let title = document.getElementById('page-title');
     if (title) {
-        title.innerText = pageId;
+        title.innerText = pageId.charAt(0).toUpperCase() + pageId.slice(1);
     }
 
     let buttons = document.querySelectorAll('.nav-button');
     for (let j = 0; j < buttons.length; j++) {
         buttons[j].classList.remove('active');
     }
-    btn.classList.add('active');
+
+    if (btn) {
+        btn.classList.add('active');
+    }
+}
+
+function goToInvoice() {
+    let invoiceButton = document.querySelectorAll('.nav-button')[4];
+    showPage('invoices', invoiceButton);
+    window.scrollTo(0, 0);
 }
 
 function addClient() {
