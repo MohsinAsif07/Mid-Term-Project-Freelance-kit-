@@ -15,7 +15,8 @@
     <div class="sidebar" id="sidebar">
 
         <div class="brand">
-            <img src="logo.png" class="logo" alt="FreelanceKit">
+            <h2 style="color:white;">FreelanceKit</h2>
+            <small style="color:#8290aa;">Your Business Organized</small>
         </div>
 
         <p class="menu-title">MAIN MENU</p>
@@ -48,6 +49,8 @@
         <div class="sidebar-bottom">
             <p>FreelanceKit</p>
             <small>Freelancer Management System</small>
+            <br>
+            <small>Made by Mohsin Asif</small>
         </div>
 
     </div>
@@ -143,12 +146,12 @@
                     <div class="chart" id="myChart"></div>
 
                     <div class="months">
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>6</span>
+                        <span>Inv 1</span>
+                        <span>Inv 2</span>
+                        <span>Inv 3</span>
+                        <span>Inv 4</span>
+                        <span>Inv 5</span>
+                        <span>Inv 6</span>
                     </div>
                 </div>
 
@@ -205,7 +208,9 @@
 
             <div class="form">
                 <input id="projectName" placeholder="Project Name">
-                <input id="projectClient" placeholder="Client Name">
+                <select id="projectClient">
+                    <option value="">Select Client</option>
+                </select>
                 <input id="projectBudget" type="number" placeholder="Budget $">
                 <button class="primary-btn" onclick="addProject()">Add Project</button>
             </div>
@@ -254,6 +259,20 @@
             <div class="box">
                 <h3>Payment Information</h3>
                 <p id="paymentInfo">No payments yet.</p>
+            </div>
+
+            <div class="box">
+                <h3>Recent Invoices</h3>
+                <div class="table-wrap">
+                    <table id="earningsTable">
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Client</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
         </div>
