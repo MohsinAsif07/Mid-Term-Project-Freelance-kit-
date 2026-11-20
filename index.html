@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <title>FreelanceKit - Dashboard</title>
     <meta charset="UTF-8">
@@ -19,25 +19,11 @@
 
         <p class="menu-title">MAIN MENU</p>
 
-        <button class="nav active" onclick="showPage('dashboard', this)">
-            Dashboard
-        </button>
-
-        <button class="nav" onclick="showPage('clients', this)">
-            Clients
-        </button>
-
-        <button class="nav" onclick="showPage('projects', this)">
-            Projects
-        </button>
-
-        <button class="nav" onclick="showPage('earnings', this)">
-            Earnings
-        </button>
-
-        <button class="nav" onclick="showPage('invoices', this)">
-            Invoices
-        </button>
+        <button class="nav active" onclick="showPage('dashboard', this)">Dashboard</button>
+        <button class="nav" onclick="showPage('clients', this)">Clients</button>
+        <button class="nav" onclick="showPage('projects', this)">Projects</button>
+        <button class="nav" onclick="showPage('earnings', this)">Earnings</button>
+        <button class="nav" onclick="showPage('invoices', this)">Invoices</button>
 
         <div class="sidebar-bottom">
             <p>FreelanceKit</p>
@@ -49,7 +35,7 @@
 
         <header class="topbar">
             <div class="top-left">
-                <button class="menu-toggle" onclick="toggleSidebar()">Menu</button>
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
                 <div>
                     <h3 id="pageTitle">Dashboard</h3>
                     <small>Manage your freelance business</small>
@@ -57,13 +43,12 @@
             </div>
 
             <div class="top-actions">
-                <input type="text" id="search" placeholder="Search records..." oninput="searchData()">
+                <input type="text" id="search" placeholder="Search records..." onkeyup="searchData()">
                 <button class="primary-btn" onclick="goInvoice()">+ New Invoice</button>
             </div>
         </header>
 
         <section id="dashboard" class="page active">
-
             <div class="welcome">
                 <h1>Dashboard Overview</h1>
                 <p class="subtitle">Track your business performance and manage your work.</p>
@@ -115,12 +100,8 @@
                     <p class="subtitle">Last 6 invoices</p>
                     <div class="chart" id="myChart"></div>
                     <div class="months">
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>6</span>
+                        <span>1</span><span>2</span><span>3</span>
+                        <span>4</span><span>5</span><span>6</span>
                     </div>
                 </div>
             </div>
@@ -134,7 +115,6 @@
                     <button onclick="goPage('earnings')">View Earnings</button>
                 </div>
             </div>
-
         </section>
 
         <section id="clients" class="page">
@@ -151,11 +131,7 @@
                 <h3>All Clients</h3>
                 <div class="table-wrap">
                     <table id="clientsTable">
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Action</th>
-                        </tr>
+                        <tr><th>Name</th><th>Email</th><th>Action</th></tr>
                     </table>
                 </div>
             </div>
@@ -168,7 +144,7 @@
             <div class="form">
                 <input id="projectName" placeholder="Project Name">
                 <input id="projectClient" placeholder="Client Name">
-                <input id="projectBudget" type="number" min="1" placeholder="Budget $">
+                <input id="projectBudget" type="number" placeholder="Budget $">
                 <button class="primary-btn" onclick="addProject()">Add Project</button>
             </div>
 
@@ -177,11 +153,8 @@
                 <div class="table-wrap">
                     <table id="projectsTable">
                         <tr>
-                            <th>Project</th>
-                            <th>Client</th>
-                            <th>Budget</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>Project</th><th>Client</th><th>Budget</th>
+                            <th>Status</th><th>Action</th>
                         </tr>
                     </table>
                 </div>
@@ -219,7 +192,7 @@
             <div class="form">
                 <input id="invoiceClient" placeholder="Client Name">
                 <input id="invoiceProject" placeholder="Project Name">
-                <input id="invoiceAmount" type="number" min="1" placeholder="Amount $">
+                <input id="invoiceAmount" type="number" placeholder="Amount $">
                 <button class="primary-btn" onclick="addInvoice()">Generate Invoice</button>
             </div>
 
@@ -229,7 +202,6 @@
                         <h2>FreelanceKit</h2>
                         <p>Professional Invoice</p>
                     </div>
-
                     <div class="right">
                         <h3 id="invNumber"></h3>
                         <p id="invDate"></p>
@@ -244,14 +216,8 @@
 
                 <div class="table-wrap">
                     <table>
-                        <tr>
-                            <th>Description</th>
-                            <th>Amount</th>
-                        </tr>
-                        <tr>
-                            <td id="invDescription"></td>
-                            <td id="invAmountText"></td>
-                        </tr>
+                        <tr><th>Description</th><th>Amount</th></tr>
+                        <tr><td id="invDescription"></td><td id="invAmountText"></td></tr>
                     </table>
                 </div>
 
@@ -265,11 +231,8 @@
                 <div class="table-wrap">
                     <table id="invoicesTable">
                         <tr>
-                            <th>Invoice</th>
-                            <th>Client</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>Invoice</th><th>Client</th><th>Amount</th>
+                            <th>Status</th><th>Action</th>
                         </tr>
                     </table>
                 </div>
