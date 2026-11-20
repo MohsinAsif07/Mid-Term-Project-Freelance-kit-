@@ -1,4 +1,3 @@
-
 let clients = JSON.parse(localStorage.getItem("clients")) || [];
 let projects = JSON.parse(localStorage.getItem("projects")) || [];
 let invoices = JSON.parse(localStorage.getItem("invoices")) || [];
