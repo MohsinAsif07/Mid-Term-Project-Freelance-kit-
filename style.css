@@ -19,9 +19,9 @@ body {
 .sidebar {
     width: 245px;
     min-height: 100vh;
+    padding: 25px 18px;
     background: #101b34;
     color: white;
-    padding: 25px 18px;
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
@@ -29,14 +29,14 @@ body {
 
 .brand {
     padding: 5px 5px 25px;
-    border-bottom: 1px solid #283550;
     margin-bottom: 25px;
+    border-bottom: 1px solid #283550;
 }
 
 .logo {
+    display: block;
     width: 100%;
     max-width: 195px;
-    display: block;
 }
 
 .menu-title {
@@ -48,15 +48,16 @@ body {
 
 .nav {
     width: 100%;
-    background: transparent;
-    color: #b8c4d9;
-    text-align: left;
-    padding: 14px;
+    min-height: 46px;
+    padding: 13px;
     margin-bottom: 8px;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
+    background: transparent;
+    color: #b8c4d9;
+    text-align: left;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .nav:hover,
@@ -89,15 +90,15 @@ body {
 }
 
 .topbar {
-    background: white;
-    border: 1px solid #e2e8f0;
-    padding: 16px 20px;
-    border-radius: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 15px;
+    padding: 16px 20px;
     margin-bottom: 30px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
 }
 
 .top-left,
@@ -133,14 +134,14 @@ input:focus {
 }
 
 button {
+    padding: 11px 15px;
+    border: none;
+    border-radius: 8px;
     background: #2864e8;
     color: white;
-    border: none;
-    padding: 11px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
     font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 button:hover {
@@ -175,16 +176,16 @@ button:disabled {
 }
 
 .page h1 {
+    color: #101b34;
     font-size: 27px;
     margin-bottom: 8px;
-    color: #101b34;
 }
 
 .subtitle {
     color: #8290a5;
     font-size: 13px;
-    margin-bottom: 20px;
     line-height: 1.6;
+    margin-bottom: 20px;
 }
 
 .welcome {
@@ -193,18 +194,19 @@ button:disabled {
 
 .stats {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px;
     margin: 20px 0;
 }
 
 .card,
 .box {
+    min-width: 0;
+    padding: 20px;
+    margin-bottom: 18px;
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 18px;
 }
 
 .card p {
@@ -216,6 +218,7 @@ button:disabled {
     color: #2864e8;
     font-size: 26px;
     margin: 14px 0;
+    overflow-wrap: anywhere;
 }
 
 .card small {
@@ -247,9 +250,9 @@ table {
 
 th,
 td {
-    text-align: left;
     padding: 13px 10px;
     border-bottom: 1px solid #edf0f5;
+    text-align: left;
     font-size: 12px;
     white-space: nowrap;
 }
@@ -267,11 +270,11 @@ td {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    background: white;
     padding: 20px;
+    margin: 20px 0;
+    background: white;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    margin: 20px 0;
 }
 
 .form input {
@@ -280,14 +283,14 @@ td {
 }
 
 .chart {
-    height: 150px;
-    background: #f0f4fd;
-    border-radius: 10px;
     display: flex;
     align-items: flex-end;
     gap: 10px;
+    height: 150px;
     padding: 12px;
     margin-top: 20px;
+    background: #f0f4fd;
+    border-radius: 10px;
 }
 
 .bar {
@@ -300,35 +303,36 @@ td {
 .months {
     display: flex;
     justify-content: space-between;
-    font-size: 11px;
     margin-top: 8px;
     color: #8290a5;
+    font-size: 11px;
 }
 
 .quick {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
 }
 
 .quick button {
-    padding: 15px 8px;
+    min-height: 48px;
 }
 
 .invoice {
     display: none;
-    background: white;
     padding: 30px;
+    margin-bottom: 20px;
+    background: white;
     border: 1px solid #dce3ee;
     border-radius: 12px;
-    margin-bottom: 20px;
 }
 
 .invHead {
     display: flex;
     justify-content: space-between;
-    border-bottom: 2px solid #e2e8f0;
+    gap: 10px;
     padding-bottom: 20px;
+    border-bottom: 2px solid #e2e8f0;
 }
 
 .invHead h2 {
@@ -344,9 +348,9 @@ td {
 }
 
 .bill {
-    background: #f3f6fc;
     padding: 18px;
     margin: 22px 0;
+    background: #f3f6fc;
     border-radius: 8px;
 }
 
@@ -364,15 +368,15 @@ td {
 
 @media(max-width: 1100px) {
     .stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .quick {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .two {
         grid-template-columns: 1fr;
+    }
+
+    .quick {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -385,7 +389,7 @@ td {
         position: fixed;
         top: 0;
         bottom: 0;
-        left: -270px;
+        left: -280px;
         width: 270px;
         max-width: 85vw;
         height: 100vh;
@@ -393,8 +397,7 @@ td {
         min-height: 0;
         padding: 22px 18px;
         overflow-y: auto;
-        display: flex;
-        flex-direction: column;
+        overflow-x: hidden;
         z-index: 1001;
         transition: left 0.3s ease;
     }
@@ -405,6 +408,7 @@ td {
 
     .sidebar-bottom {
         margin-top: auto;
+        flex-shrink: 0;
         padding-bottom: 20px;
     }
 
@@ -412,7 +416,7 @@ td {
         display: block;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.5);
         z-index: 1000;
     }
 
@@ -434,6 +438,7 @@ td {
 
     .menu-toggle {
         display: block;
+        flex-shrink: 0;
     }
 
     .top-actions {
@@ -446,8 +451,8 @@ td {
     }
 
     .top-actions button {
-        white-space: nowrap;
         padding: 11px 10px;
+        white-space: nowrap;
     }
 
     .page h1 {
@@ -455,31 +460,21 @@ td {
     }
 
     .stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
     }
 
     .card {
         padding: 15px;
-        min-width: 0;
     }
 
     .card h2 {
         font-size: 21px;
     }
 
-    .two {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-
-    .quick {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .quick button {
         width: 100%;
         min-height: 52px;
+        padding: 10px;
         white-space: normal;
     }
 
@@ -500,7 +495,6 @@ td {
 
     .invHead {
         flex-direction: column;
-        gap: 10px;
     }
 
     .invHead .right {
