@@ -1,10 +1,8 @@
+
 let clients = JSON.parse(localStorage.getItem("clients")) || [];
 let projects = JSON.parse(localStorage.getItem("projects")) || [];
 let invoices = JSON.parse(localStorage.getItem("invoices")) || [];
-let invoiceCount = Number(localStorage.getItem("invoiceCount")) || 0;
-
-let sidebar = document.getElementById("sidebar");
-let overlay = document.getElementById("overlay");
+let invoiceCount = Number(localStorage.getItem("invoiceCount")) || 1;
 
 function saveData() {
     localStorage.setItem("clients", JSON.stringify(clients));
@@ -13,371 +11,452 @@ function saveData() {
     localStorage.setItem("invoiceCount", invoiceCount);
 }
 
-function openMenu() {
-    sidebar.classList.add("open");
-    overlay.classList.add("show");
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("open");
+    document.getElementById("overlay").classList.toggle("show");
 }
 
-function closeMenu() {
-    sidebar.classList.remove("open");
-    overlay.classList.remove("show");
+function closeSidebar() {
+    document.getElementById("sidebar").classList.remove("open");
+    document.getElementById("overlay").classList.remove("show");
 }
 
-document.getElementById("menuToggle").onclick = openMenu;
-overlay.onclick = closeMenu;
-
-function showPage(pageName) {
+function showPage(name, btn) {
     let pages = document.querySelectorAll(".page");
+
     for (let i = 0; i < pages.length; i++) {
         pages[i].classList.remove("active");
     }
-    document.getElementById(pageName).classList.add("active");
 
-    let buttons = document.querySelectorAll(".nav-btn");
+    let selectedPage = document.getElementById(name);
+
+    if (!selectedPage) {
+        return;
+    }
+
+    selectedPage.classList.add("active");
+
+    let buttons = document.querySelectorAll(".nav");
+
     for (let i = 0; i < buttons.length; i++) {
-        if (buttons[i].dataset.page === pageName) {
-            buttons[i].classList.add("active");
-        } else {
-            buttons[i].classList.remove("active");
-        }
+        buttons[i].classList.remove("active");
     }
 
-    let titles = {
-        dashboard: "Dashboard",
-        clients: "Clients",
-        projects: "Projects",
-        earnings: "Earnings",
-        invoices: "Invoices"
-    };
-    document.getElementById("pageTitle").innerText = titles[pageName];
-    document.getElementById("searchInput").value = "";
-    closeMenu();
-}
-
-let navButtons = document.querySelectorAll(".nav-btn");
-for (let i = 0; i < navButtons.length; i++) {
-    navButtons[i].onclick = function() {
-        showPage(this.dataset.page);
-    };
-}
-
-let openButtons = document.querySelectorAll("[data-open]");
-for (let i = 0; i < openButtons.length; i++) {
-    openButtons[i].onclick = function() {
-        showPage(this.dataset.open);
-    };
-}
-
-function getClientName(id) {
-    for (let i = 0; i < clients.length; i++) {
-        if (clients[i].id === id) {
-            return clients[i].name;
-        }
+    if (btn) {
+        btn.classList.add("active");
     }
-    return "Unknown";
+
+    document.getElementById("pageTitle").innerText =
+        name.charAt(0).toUpperCase() + name.slice(1);
+
+    closeSidebar();
 }
 
-function getProjectName(id) {
-    for (let i = 0; i < projects.length; i++) {
-        if (projects[i].id === id) {
-            return projects[i].name;
-        }
+function goPage(name) {
+    let buttons = document.querySelectorAll(".nav");
+
+    let index = [
+        "dashboard",
+        "clients",
+        "projects",
+        "earnings",
+        "invoices"
+    ].indexOf(name);
+
+    if (index !== -1) {
+        showPage(name, buttons[index]);
     }
-    return "Unknown";
 }
 
-document.getElementById("clientForm").onsubmit = function(event) {
-    event.preventDefault();
+function goInvoice() {
+    goPage("invoices");
+}
+
+function addClient() {
     let name = document.getElementById("clientName").value.trim();
     let email = document.getElementById("clientEmail").value.trim();
-    let phone = document.getElementById("clientPhone").value.trim();
+
     if (name === "" || email === "") {
-        alert("Please enter client name and email.");
+        alert("Please fill all fields");
         return;
     }
-    clients.push({ id: Date.now(), name: name, email: email, phone: phone });
+
+    let client = {
+        name: name,
+        email: email
+    };
+
+    clients.push(client);
+
     saveData();
-    showAll();
-    document.getElementById("clientForm").reset();
-};
 
-function deleteClient(id) {
-    for (let i = 0; i < projects.length; i++) {
-        if (projects[i].clientId === id) {
-            alert("Delete this client's projects first.");
-            return;
-        }
-    }
-    if (confirm("Delete this client?")) {
-        let newList = [];
-        for (let i = 0; i < clients.length; i++) {
-            if (clients[i].id !== id) {
-                newList.push(clients[i]);
-            }
-        }
-        clients = newList;
-        saveData();
-        showAll();
-    }
-}
+    document.getElementById("clientName").value = "";
+    document.getElementById("clientEmail").value = "";
 
-document.getElementById("projectForm").onsubmit = function(event) {
-    event.preventDefault();
-    let name = document.getElementById("projectName").value.trim();
-    let clientId = Number(document.getElementById("projectClient").value);
-    let budget = Number(document.getElementById("projectBudget").value);
-    if (name === "" || clientId === 0 || budget <= 0) {
-        alert("Please enter valid project details.");
-        return;
-    }
-    projects.push({ id: Date.now(), name: name, clientId: clientId, budget: budget, status: "Active" });
-    saveData();
-    showAll();
-    document.getElementById("projectForm").reset();
-};
-
-function deleteProject(id) {
-    for (let i = 0; i < invoices.length; i++) {
-        if (invoices[i].projectId === id) {
-            alert("Delete the related invoice first.");
-            return;
-        }
-    }
-    if (confirm("Delete this project?")) {
-        let newList = [];
-        for (let i = 0; i < projects.length; i++) {
-            if (projects[i].id !== id) {
-                newList.push(projects[i]);
-            }
-        }
-        projects = newList;
-        saveData();
-        showAll();
-    }
-}
-
-function changeStatus(id) {
-    for (let i = 0; i < projects.length; i++) {
-        if (projects[i].id === id) {
-            if (projects[i].status === "Active") {
-                projects[i].status = "Completed";
-            } else {
-                projects[i].status = "Active";
-            }
-        }
-    }
-    saveData();
-    showAll();
-}
-
-document.getElementById("invoiceClient").onchange = function() {
-    let clientId = Number(this.value);
-    let html = '<option value="">Select project</option>';
-    for (let i = 0; i < projects.length; i++) {
-        if (projects[i].clientId === clientId) {
-            html += '<option value="' + projects[i].id + '">' + projects[i].name + '</option>';
-        }
-    }
-    document.getElementById("invoiceProject").innerHTML = html;
-    document.getElementById("invoiceAmount").value = "";
-};
-
-document.getElementById("invoiceProject").onchange = function() {
-    let projectId = Number(this.value);
-    for (let i = 0; i < projects.length; i++) {
-        if (projects[i].id === projectId) {
-            document.getElementById("invoiceAmount").value = projects[i].budget;
-        }
-    }
-};
-
-document.getElementById("invoiceForm").onsubmit = function(event) {
-    event.preventDefault();
-    let clientId = Number(document.getElementById("invoiceClient").value);
-    let projectId = Number(document.getElementById("invoiceProject").value);
-    let amount = Number(document.getElementById("invoiceAmount").value);
-    let status = document.getElementById("invoiceStatus").value;
-    if (clientId === 0 || projectId === 0 || amount <= 0) {
-        alert("Please select a valid client, project and amount.");
-        return;
-    }
-    invoiceCount = invoiceCount + 1;
-    let number = "INV-" + String(invoiceCount).padStart(3, "0");
-    invoices.push({
-        id: Date.now(),
-        number: number,
-        clientId: clientId,
-        projectId: projectId,
-        clientName: getClientName(clientId),
-        projectName: getProjectName(projectId),
-        amount: amount,
-        status: status,
-        date: new Date().toLocaleDateString()
-    });
-    saveData();
-    showAll();
-    document.getElementById("invoiceForm").reset();
-    document.getElementById("invoiceNumber").value = "INV-" + String(invoiceCount + 1).padStart(3, "0");
-};
-
-function deleteInvoice(id) {
-    if (confirm("Delete this invoice?")) {
-        let newList = [];
-        for (let i = 0; i < invoices.length; i++) {
-            if (invoices[i].id !== id) {
-                newList.push(invoices[i]);
-            }
-        }
-        invoices = newList;
-        saveData();
-        showAll();
-    }
-}
-
-function printInvoice(id) {
-    let oneInvoice = null;
-    for (let i = 0; i < invoices.length; i++) {
-        if (invoices[i].id === id) {
-            oneInvoice = invoices[i];
-        }
-    }
-    if (oneInvoice === null) {
-        return;
-    }
-    let win = window.open("", "_blank");
-    win.document.write("<h1>FreelanceKit</h1><h2>INVOICE</h2><p>Invoice: " + oneInvoice.number + "</p><p>Date: " + oneInvoice.date + "</p><p>Client: " + oneInvoice.clientName + "</p><p>Project: " + oneInvoice.projectName + "</p><h2>Amount: Rs. " + oneInvoice.amount + "</h2><p>Status: " + oneInvoice.status + "</p>");
-    win.document.close();
-    win.print();
+    showClients();
+    updateDashboard();
 }
 
 function showClients() {
-    let table = document.getElementById("clientTable");
-    let html = "";
-    if (clients.length === 0) {
-        html = '<tr><td colspan="4" class="empty-message">No clients added yet.</td></tr>';
-    } else {
-        for (let i = 0; i < clients.length; i++) {
-            let phone = clients[i].phone;
-            if (phone === "") phone = "-";
-            html += "<tr><td>" + clients[i].name + "</td><td>" + clients[i].email + "</td><td>" + phone + "</td><td><button class='action-btn delete-btn' onclick='deleteClient(" + clients[i].id + ")'>Delete</button></td></tr>";
-        }
-    }
-    table.innerHTML = html;
+    let table = document.getElementById("clientsTable");
 
-    let options = '<option value="">Select client</option>';
+    table.innerHTML =
+        "<tr><th>Name</th><th>Email</th><th>Action</th></tr>";
+
     for (let i = 0; i < clients.length; i++) {
-        options += '<option value="' + clients[i].id + '">' + clients[i].name + '</option>';
+        let row = table.insertRow();
+
+        row.insertCell(0).innerText = clients[i].name;
+        row.insertCell(1).innerText = clients[i].email;
+
+        let del = document.createElement("button");
+
+        del.innerText = "Delete";
+        del.className = "deleteBtn";
+
+        del.onclick = function() {
+            deleteClient(i);
+        };
+
+        row.insertCell(2).appendChild(del);
     }
-    document.getElementById("projectClient").innerHTML = options;
-    document.getElementById("invoiceClient").innerHTML = options;
+}
+
+function deleteClient(index) {
+    let ok = confirm("Delete this client?");
+
+    if (ok === true) {
+        clients.splice(index, 1);
+
+        saveData();
+
+        showClients();
+        updateDashboard();
+    }
+}
+
+function addProject() {
+    let name = document.getElementById("projectName").value.trim();
+    let client = document.getElementById("projectClient").value.trim();
+    let budget = Number(document.getElementById("projectBudget").value);
+
+    if (name === "" || client === "" || !Number.isFinite(budget) || budget <= 0) {
+        alert("Please enter correct project details");
+        return;
+    }
+
+    let project = {
+        name: name,
+        client: client,
+        budget: budget,
+        status: "In Progress"
+    };
+
+    projects.push(project);
+
+    saveData();
+
+    document.getElementById("projectName").value = "";
+    document.getElementById("projectClient").value = "";
+    document.getElementById("projectBudget").value = "";
+
+    showProjects();
+    updateDashboard();
 }
 
 function showProjects() {
-    let table = document.getElementById("projectTable");
-    let html = "";
-    if (projects.length === 0) {
-        html = '<tr><td colspan="5" class="empty-message">No projects added yet.</td></tr>';
-    } else {
-        for (let i = 0; i < projects.length; i++) {
-            let btnText = "Complete";
-            if (projects[i].status !== "Active") btnText = "Reopen";
-            html += "<tr><td>" + projects[i].name + "</td><td>" + getClientName(projects[i].clientId) + "</td><td>Rs. " + projects[i].budget + "</td><td>" + projects[i].status + "</td><td><button class='action-btn' onclick='changeStatus(" + projects[i].id + ")'>" + btnText + "</button><button class='action-btn delete-btn' onclick='deleteProject(" + projects[i].id + ")'>Delete</button></td></tr>";
-        }
+    let table = document.getElementById("projectsTable");
+
+    table.innerHTML =
+        "<tr><th>Project</th><th>Client</th><th>Budget</th><th>Status</th><th>Action</th></tr>";
+
+    for (let i = 0; i < projects.length; i++) {
+        let row = table.insertRow();
+
+        row.insertCell(0).innerText = projects[i].name;
+        row.insertCell(1).innerText = projects[i].client;
+        row.insertCell(2).innerText = "$" + projects[i].budget;
+        row.insertCell(3).innerText = projects[i].status;
+
+        let cell = row.insertCell(4);
+
+        let button = document.createElement("button");
+
+        button.innerText = "Complete";
+        button.disabled = projects[i].status === "Completed";
+
+        button.onclick = function() {
+            completeProject(i);
+        };
+
+        cell.appendChild(button);
+
+        let del = document.createElement("button");
+
+        del.innerText = "Delete";
+        del.className = "deleteBtn";
+
+        del.onclick = function() {
+            deleteProject(i);
+        };
+
+        cell.appendChild(del);
     }
-    table.innerHTML = html;
+}
+
+function completeProject(index) {
+    if (!projects[index]) {
+        return;
+    }
+
+    projects[index].status = "Completed";
+
+    saveData();
+
+    showProjects();
+    updateDashboard();
+}
+
+function deleteProject(index) {
+    let ok = confirm("Delete this project?");
+
+    if (ok === true) {
+        projects.splice(index, 1);
+
+        saveData();
+
+        showProjects();
+        updateDashboard();
+    }
+}
+
+function addInvoice() {
+    let client = document.getElementById("invoiceClient").value.trim();
+    let project = document.getElementById("invoiceProject").value.trim();
+    let amount = Number(document.getElementById("invoiceAmount").value);
+
+    if (client === "" || project === "" || !Number.isFinite(amount) || amount <= 0) {
+        alert("Please fill all invoice details");
+        return;
+    }
+
+    let invoice = {
+        number: "INV-" + String(invoiceCount).padStart(3, "0"),
+        client: client,
+        project: project,
+        amount: amount,
+        status: "Pending",
+        date: new Date().toLocaleDateString()
+    };
+
+    invoices.push(invoice);
+    invoiceCount++;
+
+    saveData();
+
+    document.getElementById("invNumber").innerText = invoice.number;
+    document.getElementById("invDate").innerText = "Date: " + invoice.date;
+    document.getElementById("invClient").innerText = client;
+    document.getElementById("invProject").innerText = "Project: " + project;
+    document.getElementById("invDescription").innerText = project;
+    document.getElementById("invAmountText").innerText = "$" + amount;
+    document.getElementById("invTotal").innerText = "Total: $" + amount;
+
+    document.getElementById("invoicePreview").style.display = "block";
+
+    document.getElementById("invoiceClient").value = "";
+    document.getElementById("invoiceProject").value = "";
+    document.getElementById("invoiceAmount").value = "";
+
+    showInvoices();
+    updateDashboard();
 }
 
 function showInvoices() {
-    let table = document.getElementById("invoiceTable");
-    let html = "";
-    if (invoices.length === 0) {
-        html = '<tr><td colspan="6" class="empty-message">No invoices created yet.</td></tr>';
-    } else {
-        for (let i = 0; i < invoices.length; i++) {
-            html += "<tr><td>" + invoices[i].number + "</td><td>" + invoices[i].clientName + "</td><td>" + invoices[i].projectName + "</td><td>Rs. " + invoices[i].amount + "</td><td>" + invoices[i].status + "</td><td><button class='action-btn' onclick='printInvoice(" + invoices[i].id + ")'>Print</button><button class='action-btn delete-btn' onclick='deleteInvoice(" + invoices[i].id + ")'>Delete</button></td></tr>";
-        }
+    let table = document.getElementById("invoicesTable");
+
+    table.innerHTML =
+        "<tr><th>Invoice</th><th>Client</th><th>Amount</th><th>Status</th><th>Action</th></tr>";
+
+    for (let i = 0; i < invoices.length; i++) {
+        let row = table.insertRow();
+
+        row.insertCell(0).innerText = invoices[i].number;
+        row.insertCell(1).innerText = invoices[i].client;
+        row.insertCell(2).innerText = "$" + invoices[i].amount;
+        row.insertCell(3).innerText = invoices[i].status;
+
+        let cell = row.insertCell(4);
+
+        let button = document.createElement("button");
+
+        button.innerText =
+            invoices[i].status === "Paid" ? "Paid" : "Mark Paid";
+
+        button.disabled = invoices[i].status === "Paid";
+
+        button.onclick = function() {
+            markPaid(i);
+        };
+
+        cell.appendChild(button);
+
+        let del = document.createElement("button");
+
+        del.innerText = "Delete";
+        del.className = "deleteBtn";
+
+        del.onclick = function() {
+            deleteInvoice(i);
+        };
+
+        cell.appendChild(del);
     }
-    table.innerHTML = html;
 }
 
-function showEarnings() {
-    let received = 0;
-    let pending = 0;
-    for (let i = 0; i < invoices.length; i++) {
-        if (invoices[i].status === "Paid") {
-            received = received + Number(invoices[i].amount);
-        } else {
-            pending = pending + Number(invoices[i].amount);
-        }
+function markPaid(index) {
+    if (!invoices[index]) {
+        return;
     }
-    document.getElementById("receivedAmount").innerText = "Rs. " + received;
-    document.getElementById("pendingAmount").innerText = "Rs. " + pending;
 
-    let html = "";
-    for (let i = 0; i < invoices.length; i++) {
-        html += "<tr><td>" + invoices[i].number + "</td><td>" + invoices[i].clientName + "</td><td>Rs. " + invoices[i].amount + "</td><td>" + invoices[i].status + "</td></tr>";
-    }
-    if (html === "") html = '<tr><td colspan="4" class="empty-message">No payment records.</td></tr>';
-    document.getElementById("earningTable").innerHTML = html;
+    invoices[index].status = "Paid";
+
+    saveData();
+
+    showInvoices();
+    updateDashboard();
+
+    alert("Payment marked as paid");
 }
 
-function showDashboard() {
-    let received = 0;
-    let pending = 0;
-    for (let i = 0; i < invoices.length; i++) {
-        if (invoices[i].status === "Paid") {
-            received = received + Number(invoices[i].amount);
-        } else {
-            pending = pending + Number(invoices[i].amount);
-        }
+function deleteInvoice(index) {
+    let ok = confirm("Delete this invoice?");
+
+    if (ok === true) {
+        invoices.splice(index, 1);
+
+        saveData();
+
+        showInvoices();
+        updateDashboard();
     }
+}
+
+function updateDashboard() {
+    let total = 0;
+    let pending = 0;
     let active = 0;
-    for (let i = 0; i < projects.length; i++) {
-        if (projects[i].status === "Active") active = active + 1;
+
+    for (let i = 0; i < invoices.length; i++) {
+        if (invoices[i].status === "Paid") {
+            total += Number(invoices[i].amount);
+        } else {
+            pending += Number(invoices[i].amount);
+        }
     }
-    document.getElementById("totalEarnings").innerText = "Rs. " + received;
+
+    for (let i = 0; i < projects.length; i++) {
+        if (projects[i].status === "In Progress") {
+            active++;
+        }
+    }
+
+    document.getElementById("totalEarnings").innerText = "$" + total;
+    document.getElementById("earningsTotal").innerText = "$" + total;
+
+    document.getElementById("pendingPayments").innerText = "$" + pending;
+    document.getElementById("earningsPending").innerText = "$" + pending;
+
     document.getElementById("activeProjects").innerText = active;
     document.getElementById("totalClients").innerText = clients.length;
-    document.getElementById("pendingPayments").innerText = "Rs. " + pending;
 
-    let recent = document.getElementById("recentProjects");
-    if (projects.length === 0) {
-        recent.innerHTML = '<p class="empty-message">No projects available.</p>';
-    } else {
-        let html = "";
-        let start = projects.length - 5;
-        if (start < 0) start = 0;
-        for (let i = projects.length - 1; i >= start; i--) {
-            html += '<p class="recent-item">' + projects[i].name + " - " + projects[i].status + '</p>';
+    document.getElementById("paymentInfo").innerText =
+        "Received: $" + total + " | Pending: $" + pending;
+
+    showRecentProjects();
+    updateChart();
+}
+
+function updateChart() {
+    let chart = document.getElementById("myChart");
+
+    if (!chart) {
+        return;
+    }
+
+    chart.innerHTML = "";
+
+    let last6 = invoices.slice(-6);
+
+    while (last6.length < 6) {
+        last6.unshift({ amount: 0 });
+    }
+
+    let max = 0;
+
+    for (let i = 0; i < last6.length; i++) {
+        if (Number(last6[i].amount) > max) {
+            max = Number(last6[i].amount);
         }
-        recent.innerHTML = html;
+    }
+
+    if (max === 0) {
+        max = 100;
+    }
+
+    for (let i = 0; i < last6.length; i++) {
+        let height = (Number(last6[i].amount) / max) * 100;
+
+        if (height < 10) {
+            height = 10;
+        }
+
+        let bar = document.createElement("div");
+
+        bar.className = "bar";
+        bar.style.height = height + "%";
+        bar.title = "$" + last6[i].amount;
+
+        chart.appendChild(bar);
     }
 }
 
-function showAll() {
-    showClients();
-    showProjects();
-    showInvoices();
-    showEarnings();
-    showDashboard();
+function showRecentProjects() {
+    let table = document.getElementById("recentProjects");
+
+    table.innerHTML =
+        "<tr><th>Project</th><th>Client</th><th>Budget</th><th>Status</th></tr>";
+
+    for (let i = 0; i < projects.length; i++) {
+        let row = table.insertRow();
+
+        row.insertCell(0).innerText = projects[i].name;
+        row.insertCell(1).innerText = projects[i].client;
+        row.insertCell(2).innerText = "$" + projects[i].budget;
+        row.insertCell(3).innerText = projects[i].status;
+    }
 }
 
-document.getElementById("newInvoice").onclick = function() {
-    showPage("invoices");
-};
+function searchData() {
+    let search = document.getElementById("search").value.toLowerCase();
+    let tables = document.querySelectorAll("table");
 
-document.getElementById("searchInput").oninput = function() {
-    let search = this.value.toLowerCase();
-    let page = document.querySelector(".page.active");
-    let rows = page.querySelectorAll("tbody tr");
-    for (let i = 0; i < rows.length; i++) {
-        if (rows[i].innerText.toLowerCase().includes(search)) {
-            rows[i].style.display = "";
-        } else {
-            rows[i].style.display = "none";
+    for (let i = 0; i < tables.length; i++) {
+        let rows = tables[i].getElementsByTagName("tr");
+
+        for (let j = 1; j < rows.length; j++) {
+            let text = rows[j].innerText.toLowerCase();
+
+            if (text.includes(search)) {
+                rows[j].style.display = "";
+            } else {
+                rows[j].style.display = "none";
+            }
         }
     }
-};
+}
 
-document.getElementById("invoiceNumber").value = "INV-" + String(invoiceCount + 1).padStart(3, "0");
-showAll();
+showClients();
+showProjects();
+showInvoices();
+updateDashboard();
