@@ -1,208 +1,285 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>FreelanceKit - Dashboard</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreelanceKit | Freelancer Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="overlay" id="overlay"></div>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="container">
+
     <aside class="sidebar" id="sidebar">
         <div class="brand">
-            <img src="logo.png" alt="FreelanceKit logo">
-            <p>Your Business Organized</p>
+            <img src="logo.png" class="logo" alt="FreelanceKit">
         </div>
-        <div class="menu">
-            <p class="menu-label">MAIN MENU</p>
-            <button class="nav-btn active" data-page="dashboard">Dashboard</button>
-            <button class="nav-btn" data-page="clients">Clients</button>
-            <button class="nav-btn" data-page="projects">Projects</button>
-            <button class="nav-btn" data-page="earnings">Earnings</button>
-            <button class="nav-btn" data-page="invoices">Invoices</button>
-        </div>
-        <div class="sidebar-footer">
-            <h3>FreelanceKit</h3>
-            <p>Freelancer Management System</p>
+
+        <p class="menu-title">MAIN MENU</p>
+
+        <button class="nav active" onclick="showPage('dashboard', this)">
+            Dashboard
+        </button>
+
+        <button class="nav" onclick="showPage('clients', this)">
+            Clients
+        </button>
+
+        <button class="nav" onclick="showPage('projects', this)">
+            Projects
+        </button>
+
+        <button class="nav" onclick="showPage('earnings', this)">
+            Earnings
+        </button>
+
+        <button class="nav" onclick="showPage('invoices', this)">
+            Invoices
+        </button>
+
+        <div class="sidebar-bottom">
+            <p>FreelanceKit</p>
+            <small>Freelancer Management System</small>
         </div>
     </aside>
-    <main class="main-content">
+
+    <main class="main">
+
         <header class="topbar">
-            <div class="topbar-heading">
-<button class="menu-toggle" id="menuToggle">☰</button>
+            <div class="top-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">Menu</button>
                 <div>
-                    <h2 id="pageTitle">Dashboard</h2>
-                    <p>Manage your freelance business</p>
+                    <h3 id="pageTitle">Dashboard</h3>
+                    <small>Manage your freelance business</small>
                 </div>
             </div>
-            <div class="topbar-actions">
-                <input type="search" id="searchInput" placeholder="Search records...">
-                <button class="primary-btn" id="newInvoice">+ New Invoice</button>
+
+            <div class="top-actions">
+                <input type="text" id="search" placeholder="Search records..." oninput="searchData()">
+                <button class="primary-btn" onclick="goInvoice()">+ New Invoice</button>
             </div>
         </header>
-        <section class="page active" id="dashboard">
-            <div class="page-heading">
+
+        <section id="dashboard" class="page active">
+
+            <div class="welcome">
                 <h1>Dashboard Overview</h1>
-                <p>Track your business performance and manage your work.</p>
+                <p class="subtitle">Track your business performance and manage your work.</p>
             </div>
+
             <div class="stats">
-                <article class="stat-card">
+                <div class="card">
                     <p>Total Earnings</p>
-                    <h2 id="totalEarnings">Rs. 0</h2>
+                    <h2 id="totalEarnings">$0</h2>
                     <small>Money received</small>
-                </article>
-                <article class="stat-card">
+                </div>
+
+                <div class="card">
                     <p>Active Projects</p>
                     <h2 id="activeProjects">0</h2>
                     <small>Projects in progress</small>
-                </article>
-                <article class="stat-card">
+                </div>
+
+                <div class="card">
                     <p>Total Clients</p>
                     <h2 id="totalClients">0</h2>
                     <small>Your clients</small>
-                </article>
-                <article class="stat-card">
+                </div>
+
+                <div class="card">
                     <p>Pending Payments</p>
-                    <h2 id="pendingPayments">Rs. 0</h2>
+                    <h2 id="pendingPayments">$0</h2>
                     <small>Waiting for payment</small>
-                </article>
-            </div>
-            <div class="panel">
-                <div class="panel-heading">
-                    <h2>Recent Projects</h2>
-                    <button class="text-btn" data-open="projects">View all</button>
-                </div>
-                <div id="recentProjects" class="recent-list"></div>
-            </div>
-            <div class="panel">
-                <h2>Quick Actions</h2>
-                <div class="quick-actions">
-                    <button class="primary-btn" data-open="clients">+ Add Client</button>
-                    <button class="primary-btn" data-open="projects">+ Add Project</button>
-                    <button class="primary-btn" data-open="invoices">+ Generate Invoice</button>
-                    <button class="secondary-btn" data-open="earnings">View Earnings</button>
                 </div>
             </div>
+
+            <div class="two">
+                <div class="box">
+                    <h3>Recent Projects</h3>
+                    <div class="table-wrap">
+                        <table id="recentProjects">
+                            <tr>
+                                <th>Project</th>
+                                <th>Client</th>
+                                <th>Budget</th>
+                                <th>Status</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <h3>Earnings Overview</h3>
+                    <p class="subtitle">Last 6 invoices</p>
+                    <div class="chart" id="myChart"></div>
+                    <div class="months">
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>6</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <h3>Quick Actions</h3>
+                <div class="quick">
+                    <button onclick="goPage('clients')">+ Add Client</button>
+                    <button onclick="goPage('projects')">+ Add Project</button>
+                    <button onclick="goInvoice()">+ Generate Invoice</button>
+                    <button onclick="goPage('earnings')">View Earnings</button>
+                </div>
+            </div>
+
         </section>
-        <section class="page" id="clients">
-            <div class="page-heading">
-                <h1>Clients</h1>
-                <p>Manage your client records.</p>
+
+        <section id="clients" class="page">
+            <h1>Clients</h1>
+            <p class="subtitle">Manage all your clients and contact details.</p>
+
+            <div class="form">
+                <input id="clientName" placeholder="Client Name">
+                <input id="clientEmail" type="email" placeholder="Email Address">
+                <button class="primary-btn" onclick="addClient()">Add Client</button>
             </div>
-            <div class="panel">
-                <h2>Add New Client</h2>
-                <form id="clientForm" class="form-grid">
-                    <input type="text" id="clientName" placeholder="Client name" required>
-                    <input type="email" id="clientEmail" placeholder="Client email" required>
-                    <input type="tel" id="clientPhone" placeholder="Phone number">
-                    <button type="submit" class="primary-btn">+ Add Client</button>
-                </form>
-            </div>
-            <div class="panel">
-                <h2>All Clients</h2>
+
+            <div class="box">
+                <h3>All Clients</h3>
                 <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr><th>Name</th><th>Email</th><th>Phone</th><th>Action</th></tr>
-                        </thead>
-                        <tbody id="clientTable"></tbody>
+                    <table id="clientsTable">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
                     </table>
                 </div>
             </div>
         </section>
-        <section class="page" id="projects">
-            <div class="page-heading">
-                <h1>Projects</h1>
-                <p>Organize and track your freelance work.</p>
+
+        <section id="projects" class="page">
+            <h1>Projects</h1>
+            <p class="subtitle">Organize and track your freelance projects.</p>
+
+            <div class="form">
+                <input id="projectName" placeholder="Project Name">
+                <input id="projectClient" placeholder="Client Name">
+                <input id="projectBudget" type="number" min="1" placeholder="Budget $">
+                <button class="primary-btn" onclick="addProject()">Add Project</button>
             </div>
-            <div class="panel">
-                <h2>Add New Project</h2>
-                <form id="projectForm" class="form-grid">
-                    <input type="text" id="projectName" placeholder="Project name" required>
-                    <select id="projectClient" required>
-                        <option value="">Select client</option>
-                    </select>
-                    <input type="number" id="projectBudget" placeholder="Project budget (Rs.)" min="1" required>
-                    <button type="submit" class="primary-btn">+ Add Project</button>
-                </form>
-            </div>
-            <div class="panel">
-                <h2>All Projects</h2>
+
+            <div class="box">
+                <h3>All Projects</h3>
                 <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr><th>Project</th><th>Client</th><th>Budget</th><th>Status</th><th>Action</th></tr>
-                        </thead>
-                        <tbody id="projectTable"></tbody>
+                    <table id="projectsTable">
+                        <tr>
+                            <th>Project</th>
+                            <th>Client</th>
+                            <th>Budget</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
                     </table>
                 </div>
             </div>
         </section>
-        <section class="page" id="earnings">
-            <div class="page-heading">
-                <h1>Earnings</h1>
-                <p>Keep track of received and pending payments.</p>
-            </div>
+
+        <section id="earnings" class="page">
+            <h1>Earnings</h1>
+            <p class="subtitle">Monitor your income and pending payments.</p>
+
             <div class="stats earnings-stats">
-                <article class="stat-card">
-                    <p>Received Payments</p>
-                    <h2 id="receivedAmount">Rs. 0</h2>
-                    <small>Paid invoices</small>
-                </article>
-                <article class="stat-card">
+                <div class="card">
+                    <p>Total Earned</p>
+                    <h2 id="earningsTotal">$0</h2>
+                    <small>Payments received</small>
+                </div>
+
+                <div class="card">
                     <p>Pending Payments</p>
-                    <h2 id="pendingAmount">Rs. 0</h2>
-                    <small>Unpaid invoices</small>
-                </article>
+                    <h2 id="earningsPending">$0</h2>
+                    <small>Payments outstanding</small>
+                </div>
             </div>
-            <div class="panel">
-                <h2>Payment Records</h2>
+
+            <div class="box">
+                <h3>Payment Information</h3>
+                <p id="paymentInfo">No payments yet.</p>
+            </div>
+        </section>
+
+        <section id="invoices" class="page">
+            <h1>Invoices</h1>
+            <p class="subtitle">Create and manage professional invoices.</p>
+
+            <div class="form">
+                <input id="invoiceClient" placeholder="Client Name">
+                <input id="invoiceProject" placeholder="Project Name">
+                <input id="invoiceAmount" type="number" min="1" placeholder="Amount $">
+                <button class="primary-btn" onclick="addInvoice()">Generate Invoice</button>
+            </div>
+
+            <div id="invoicePreview" class="invoice">
+                <div class="invHead">
+                    <div>
+                        <h2>FreelanceKit</h2>
+                        <p>Professional Invoice</p>
+                    </div>
+
+                    <div class="right">
+                        <h3 id="invNumber"></h3>
+                        <p id="invDate"></p>
+                    </div>
+                </div>
+
+                <div class="bill">
+                    <p>Bill To:</p>
+                    <h3 id="invClient"></h3>
+                    <p id="invProject"></p>
+                </div>
+
                 <div class="table-wrap">
                     <table>
-                        <thead>
-                            <tr><th>Invoice</th><th>Client</th><th>Amount</th><th>Status</th></tr>
-                        </thead>
-                        <tbody id="earningTable"></tbody>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                        <tr>
+                            <td id="invDescription"></td>
+                            <td id="invAmountText"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h2 id="invTotal" class="right"></h2>
+                <p class="thank">Thank you for your business!</p>
+                <button class="primary-btn" onclick="window.print()">Print Invoice</button>
+            </div>
+
+            <div class="box">
+                <h3>All Invoices</h3>
+                <div class="table-wrap">
+                    <table id="invoicesTable">
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Client</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
                     </table>
                 </div>
             </div>
         </section>
-        <section class="page" id="invoices">
-            <div class="page-heading">
-                <h1>Invoices</h1>
-                <p>Create and manage client invoices.</p>
-            </div>
-            <div class="panel">
-                <h2>Create Invoice</h2>
-                <form id="invoiceForm" class="form-grid">
-                    <input type="text" id="invoiceNumber" readonly>
-                    <select id="invoiceClient" required>
-                        <option value="">Select client</option>
-                    </select>
-                    <select id="invoiceProject" required>
-                        <option value="">Select project</option>
-                    </select>
-                    <input type="number" id="invoiceAmount" placeholder="Amount (Rs.)" min="1" required>
-                    <select id="invoiceStatus">
-                        <option value="Pending">Pending</option>
-                        <option value="Paid">Paid</option>
-                    </select>
-                    <button type="submit" class="primary-btn">Generate Invoice</button>
-                </form>
-            </div>
-            <div class="panel">
-                <h2>All Invoices</h2>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr><th>Invoice</th><th>Client</th><th>Project</th><th>Amount</th><th>Status</th><th>Action</th></tr>
-                        </thead>
-                        <tbody id="invoiceTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+
     </main>
-    <script src="app.js"></script>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
