@@ -27,13 +27,7 @@ function showPage(name, btn) {
         pages[i].classList.remove("active");
     }
 
-    let selectedPage = document.getElementById(name);
-
-    if (!selectedPage) {
-        return;
-    }
-
-    selectedPage.classList.add("active");
+    document.getElementById(name).classList.add("active");
 
     let buttons = document.querySelectorAll(".nav");
 
@@ -54,13 +48,7 @@ function showPage(name, btn) {
 function goPage(name) {
     let buttons = document.querySelectorAll(".nav");
 
-    let index = [
-        "dashboard",
-        "clients",
-        "projects",
-        "earnings",
-        "invoices"
-    ].indexOf(name);
+    let index = ["dashboard", "clients", "projects", "earnings", "invoices"].indexOf(name);
 
     if (index !== -1) {
         showPage(name, buttons[index]);
@@ -75,7 +63,7 @@ function addClient() {
     let name = document.getElementById("clientName").value.trim();
     let email = document.getElementById("clientEmail").value.trim();
 
-    if (name === "" || email === "") {
+    if (name == "" || email == "") {
         alert("Please fill all fields");
         return;
     }
@@ -86,7 +74,6 @@ function addClient() {
     };
 
     clients.push(client);
-
     saveData();
 
     document.getElementById("clientName").value = "";
@@ -99,8 +86,7 @@ function addClient() {
 function showClients() {
     let table = document.getElementById("clientsTable");
 
-    table.innerHTML =
-        "<tr><th>Name</th><th>Email</th><th>Action</th></tr>";
+    table.innerHTML = "<tr><th>Name</th><th>Email</th><th>Action</th></tr>";
 
     for (let i = 0; i < clients.length; i++) {
         let row = table.insertRow();
@@ -109,7 +95,6 @@ function showClients() {
         row.insertCell(1).innerText = clients[i].email;
 
         let del = document.createElement("button");
-
         del.innerText = "Delete";
         del.className = "deleteBtn";
 
@@ -122,13 +107,9 @@ function showClients() {
 }
 
 function deleteClient(index) {
-    let ok = confirm("Delete this client?");
-
-    if (ok === true) {
+    if (confirm("Delete this client?")) {
         clients.splice(index, 1);
-
         saveData();
-
         showClients();
         updateDashboard();
     }
@@ -139,7 +120,7 @@ function addProject() {
     let client = document.getElementById("projectClient").value.trim();
     let budget = Number(document.getElementById("projectBudget").value);
 
-    if (name === "" || client === "" || !Number.isFinite(budget) || budget <= 0) {
+    if (name == "" || client == "" || budget <= 0) {
         alert("Please enter correct project details");
         return;
     }
@@ -152,7 +133,6 @@ function addProject() {
     };
 
     projects.push(project);
-
     saveData();
 
     document.getElementById("projectName").value = "";
@@ -179,19 +159,17 @@ function showProjects() {
 
         let cell = row.insertCell(4);
 
-        let button = document.createElement("button");
+        let complete = document.createElement("button");
+        complete.innerText = projects[i].status == "Completed" ? "Completed" : "Complete";
+        complete.disabled = projects[i].status == "Completed";
 
-        button.innerText = "Complete";
-        button.disabled = projects[i].status === "Completed";
-
-        button.onclick = function() {
+        complete.onclick = function() {
             completeProject(i);
         };
 
-        cell.appendChild(button);
+        cell.appendChild(complete);
 
         let del = document.createElement("button");
-
         del.innerText = "Delete";
         del.className = "deleteBtn";
 
@@ -204,26 +182,16 @@ function showProjects() {
 }
 
 function completeProject(index) {
-    if (!projects[index]) {
-        return;
-    }
-
     projects[index].status = "Completed";
-
     saveData();
-
     showProjects();
     updateDashboard();
 }
 
 function deleteProject(index) {
-    let ok = confirm("Delete this project?");
-
-    if (ok === true) {
+    if (confirm("Delete this project?")) {
         projects.splice(index, 1);
-
         saveData();
-
         showProjects();
         updateDashboard();
     }
@@ -234,7 +202,7 @@ function addInvoice() {
     let project = document.getElementById("invoiceProject").value.trim();
     let amount = Number(document.getElementById("invoiceAmount").value);
 
-    if (client === "" || project === "" || !Number.isFinite(amount) || amount <= 0) {
+    if (client == "" || project == "" || amount <= 0) {
         alert("Please fill all invoice details");
         return;
     }
@@ -250,7 +218,6 @@ function addInvoice() {
 
     invoices.push(invoice);
     invoiceCount++;
-
     saveData();
 
     document.getElementById("invNumber").innerText = invoice.number;
@@ -260,7 +227,6 @@ function addInvoice() {
     document.getElementById("invDescription").innerText = project;
     document.getElementById("invAmountText").innerText = "$" + amount;
     document.getElementById("invTotal").innerText = "Total: $" + amount;
-
     document.getElementById("invoicePreview").style.display = "block";
 
     document.getElementById("invoiceClient").value = "";
@@ -287,21 +253,17 @@ function showInvoices() {
 
         let cell = row.insertCell(4);
 
-        let button = document.createElement("button");
+        let paid = document.createElement("button");
+        paid.innerText = invoices[i].status == "Paid" ? "Paid" : "Mark Paid";
+        paid.disabled = invoices[i].status == "Paid";
 
-        button.innerText =
-            invoices[i].status === "Paid" ? "Paid" : "Mark Paid";
-
-        button.disabled = invoices[i].status === "Paid";
-
-        button.onclick = function() {
+        paid.onclick = function() {
             markPaid(i);
         };
 
-        cell.appendChild(button);
+        cell.appendChild(paid);
 
         let del = document.createElement("button");
-
         del.innerText = "Delete";
         del.className = "deleteBtn";
 
@@ -314,28 +276,17 @@ function showInvoices() {
 }
 
 function markPaid(index) {
-    if (!invoices[index]) {
-        return;
-    }
-
     invoices[index].status = "Paid";
-
     saveData();
-
     showInvoices();
     updateDashboard();
-
     alert("Payment marked as paid");
 }
 
 function deleteInvoice(index) {
-    let ok = confirm("Delete this invoice?");
-
-    if (ok === true) {
+    if (confirm("Delete this invoice?")) {
         invoices.splice(index, 1);
-
         saveData();
-
         showInvoices();
         updateDashboard();
     }
@@ -347,7 +298,7 @@ function updateDashboard() {
     let active = 0;
 
     for (let i = 0; i < invoices.length; i++) {
-        if (invoices[i].status === "Paid") {
+        if (invoices[i].status == "Paid") {
             total += Number(invoices[i].amount);
         } else {
             pending += Number(invoices[i].amount);
@@ -355,17 +306,15 @@ function updateDashboard() {
     }
 
     for (let i = 0; i < projects.length; i++) {
-        if (projects[i].status === "In Progress") {
+        if (projects[i].status == "In Progress") {
             active++;
         }
     }
 
     document.getElementById("totalEarnings").innerText = "$" + total;
     document.getElementById("earningsTotal").innerText = "$" + total;
-
     document.getElementById("pendingPayments").innerText = "$" + pending;
     document.getElementById("earningsPending").innerText = "$" + pending;
-
     document.getElementById("activeProjects").innerText = active;
     document.getElementById("totalClients").innerText = clients.length;
 
@@ -378,11 +327,6 @@ function updateDashboard() {
 
 function updateChart() {
     let chart = document.getElementById("myChart");
-
-    if (!chart) {
-        return;
-    }
-
     chart.innerHTML = "";
 
     let last6 = invoices.slice(-6);
@@ -399,7 +343,7 @@ function updateChart() {
         }
     }
 
-    if (max === 0) {
+    if (max == 0) {
         max = 100;
     }
 
@@ -411,7 +355,6 @@ function updateChart() {
         }
 
         let bar = document.createElement("div");
-
         bar.className = "bar";
         bar.style.height = height + "%";
         bar.title = "$" + last6[i].amount;
@@ -437,7 +380,7 @@ function showRecentProjects() {
 }
 
 function searchData() {
-    let search = document.getElementById("search").value.toLowerCase();
+    let value = document.getElementById("search").value.toLowerCase();
     let tables = document.querySelectorAll("table");
 
     for (let i = 0; i < tables.length; i++) {
@@ -446,7 +389,7 @@ function searchData() {
         for (let j = 1; j < rows.length; j++) {
             let text = rows[j].innerText.toLowerCase();
 
-            if (text.includes(search)) {
+            if (text.includes(value)) {
                 rows[j].style.display = "";
             } else {
                 rows[j].style.display = "none";
